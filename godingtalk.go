@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
 )
 
@@ -129,6 +130,8 @@ func NewDingTalkClientAppKey(appKey string, appSecret string) *DingTalkClient {
 	return c
 }
 
+var autoFreshAccessTokenLock sync.Once
+
 //RefreshAccessToken is to get a valid access token
 func (c *DingTalkClient) RefreshAccessToken() error {
 	var data AccessTokenResponse
@@ -154,6 +157,19 @@ func (c *DingTalkClient) RefreshAccessToken() error {
 		data.Created = time.Now().Unix()
 		err = c.Cache.Set(&data)
 	}
+
+	//添加线程检测accessToken 是否超期
+
+	autoFreshAccessTokenLock.Do(func() {
+		go func() {
+			for {
+				fmt.Println("等待检查 accessToken..")
+				time.Sleep(15 * time.Minute)
+				c.RefreshAccessToken()
+			}
+
+		}()
+	})
 	return err
 }
 

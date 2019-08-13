@@ -44,7 +44,7 @@ func (c *FileCache) Get(data Expirable) error {
 		if err == nil {
 			created := data.CreatedAt()
 			expires := data.ExpiresIn()
-			if err == nil && time.Now().Unix() > created+int64(expires-60) {
+			if err == nil && time.Now().Unix() > created+int64(expires-60*20) {
 				err = errors.New("Data is already expired")
 			}
 		}
@@ -73,7 +73,7 @@ func (c *InMemoryCache) Get(data Expirable) error {
 	if err == nil {
 		created := data.CreatedAt()
 		expires := data.ExpiresIn()
-		if err == nil && time.Now().Unix() > created+int64(expires-60) {
+		if err == nil && time.Now().Unix() > created+int64(expires-60*20) {
 			err = errors.New("Data is already expired")
 		}
 	}
