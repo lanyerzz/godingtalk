@@ -141,7 +141,7 @@ func (c *DingTalkClient) RefreshAccessToken() error {
 	params := url.Values{}
 	if c.AppKey != "" { //通过appkey 获取 accessToken
 		params.Add("appkey", c.AppKey)
-		params.Add("appsecret", c.AppKey)
+		params.Add("appsecret", c.AppSecret)
 	} else {
 		params.Add("corpid", c.CorpID)
 		params.Add("corpsecret", c.CorpSecret)
