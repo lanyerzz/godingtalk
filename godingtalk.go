@@ -161,6 +161,7 @@ func (c *DingTalkClient) RefreshAccessToken() error {
 	//添加线程检测accessToken 是否超期
 	fmt.Println("=========wait for check accessToken============")
 	autoFreshAccessTokenLock.Do(func() {
+		fmt.Println("等待检查 accessToken.")
 		go func() {
 			for {
 				fmt.Println("等待检查 accessToken...")
