@@ -23,7 +23,9 @@ type DingTalkClient struct {
 	AccessToken string
 	HTTPClient  *http.Client
 	Cache       Cache
-
+	//钉钉应用 app
+	AppKey    string
+	AppSecret string
 	//社交相关的属性
 	SnsAppID       string
 	SnsAppSecret   string
@@ -114,6 +116,19 @@ func NewDingTalkClient(corpID string, corpSecret string) *DingTalkClient {
 	return c
 }
 
+//NewDingTalkClientAppKey create a DingTalkClient instance by appkey and appsecret
+func NewDingTalkClientAppKey(appKey string, appSecret string) *DingTalkClient {
+	c := &DingTalkClient{}
+	c.AppKey = appKey
+	c.AppSecret = appSecret
+
+	c.HTTPClient = &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	c.Cache = NewFileCache(".auth_file")
+	return c
+}
+
 //RefreshAccessToken is to get a valid access token
 func (c *DingTalkClient) RefreshAccessToken() error {
 	var data AccessTokenResponse
@@ -124,8 +139,14 @@ func (c *DingTalkClient) RefreshAccessToken() error {
 	}
 
 	params := url.Values{}
-	params.Add("corpid", c.CorpID)
-	params.Add("corpsecret", c.CorpSecret)
+	if c.AppKey != "" { //通过appkey 获取 accessToken
+		params.Add("appkey", c.AppKey)
+		params.Add("appsecret", c.AppKey)
+	} else {
+		params.Add("corpid", c.CorpID)
+		params.Add("corpsecret", c.CorpSecret)
+	}
+
 	err = c.httpRPC("gettoken", params, nil, &data)
 	if err == nil {
 		c.AccessToken = data.AccessToken
