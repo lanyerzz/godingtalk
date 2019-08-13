@@ -1,6 +1,7 @@
 package godingtalk
 
 import (
+	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -12,6 +13,7 @@ func init() {
 	c = NewDingTalkClient(os.Getenv("corpid"), os.Getenv("corpsecret"))
 	err := c.RefreshAccessToken()
 	if err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
 }
@@ -155,7 +157,6 @@ func TestRobotMessage(t *testing.T) {
 		t.Error(err)
 	}
 }
-
 
 func TestRobotAtMessage(t *testing.T) {
 	err := c.SendRobotTextAtMessage("b7e4b04c66b5d53669affb0b92cf533b9eff9b2bc47f86ff9f4227a2ba73798e", "这是一条测试消息", &RobotAtList{

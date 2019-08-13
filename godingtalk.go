@@ -159,7 +159,7 @@ func (c *DingTalkClient) RefreshAccessToken() error {
 	}
 
 	//添加线程检测accessToken 是否超期
-
+	fmt.Println("=========wait for check accessToken============")
 	autoFreshAccessTokenLock.Do(func() {
 		go func() {
 			for {
