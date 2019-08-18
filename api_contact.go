@@ -26,7 +26,7 @@ type User struct {
 	IsBoss          bool        `json:"isBoss"`          // isBoss 是否为企业的老板，true表示是，false表示不是
 	IsLeaderInDepts string      `json:"isLeaderInDepts"` // isLeaderInDepts 在对应的部门中是否为主管：Map结构的json字符串，key是部门的Id，value是人员在这个部门中是否为主管，true表示是，false表示不是
 	IsHide          string      `json:"isHide"`          // isHide 是否号码隐藏，true表示隐藏，false表示不隐藏
-	Department      string      `json:"department"`      // department 成员所属部门id列表
+	Department      []int       `json:"department"`      // department 成员所属部门id列表
 	Position        string      `json:"position"`        // position 职位信息
 	Avatar          string      `json:"avatar"`          // avatar 头像url
 	HiredDate       string      `json:"hiredDate"`       // hiredDate 入职时间。Unix时间戳 （在OA后台通讯录中的员工基础信息中维护过入职时间才会返回)
