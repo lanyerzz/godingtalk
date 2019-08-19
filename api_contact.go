@@ -88,6 +88,25 @@ func (c *DingTalkClient) DepartmentDetail(id int) (Department, error) {
 	return data, err
 }
 
+//UserDetail is 获取人员详细信息
+func (c *DingTalkClient) UserDetail(userId string) (User, error) {
+	var data struct {
+		User
+		OAPIResponse
+	}
+	params := url.Values{}
+	params.Add("userid", userId)
+	err := c.httpRPC("user/get", params, nil, &data)
+	if err != nil {
+		return data.User, err
+	}
+	if data.ErrCode != 0 {
+		return data.User, errors.New(data.ErrMsg)
+
+	}
+	return data.User, nil
+}
+
 //UserList is 获取部门成员
 func (c *DingTalkClient) UserList(departmentID, offset, size int) (UserList, error) {
 	var data UserList
@@ -102,6 +121,7 @@ func (c *DingTalkClient) UserList(departmentID, offset, size int) (UserList, err
 	err := c.httpRPC("user/listbypage", params, nil, &data)
 	return data, err
 }
+
 //DeptMember is 获取部门人员列表id
 func (c *DingTalkClient) DeptMember(id int) ([]string, error) {
 	params := url.Values{}
