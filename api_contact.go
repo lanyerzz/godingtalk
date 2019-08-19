@@ -1,6 +1,7 @@
 package godingtalk
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 )
@@ -100,6 +101,23 @@ func (c *DingTalkClient) UserList(departmentID, offset, size int) (UserList, err
 	params.Add("size", fmt.Sprintf("%d", size))
 	err := c.httpRPC("user/listbypage", params, nil, &data)
 	return data, err
+}
+//DeptMember is 获取部门人员列表id
+func (c *DingTalkClient) DeptMember(id int) ([]string, error) {
+	params := url.Values{}
+	params.Add("deptId", fmt.Sprintf("%d", id))
+	var data struct {
+		OAPIResponse
+		UserIds []string `json:"userIds"`
+	}
+	err := c.httpRPC("/user/getDeptMember", params, nil, &data)
+	if err != nil {
+		return nil, err
+	}
+	if data.ErrCode != 0 {
+		return nil, errors.New(data.ErrMsg)
+	}
+	return data.UserIds, nil
 }
 
 //CreateChat is
