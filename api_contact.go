@@ -141,21 +141,21 @@ func (c *DingTalkClient) DeptMember(id int) ([]string, error) {
 }
 
 //UserDeptPath 获取用户部门树path
-func (c *DingTalkClient) UserDeptPath(userID string)([][]int,error) {
+func (c *DingTalkClient) UserDeptPath(userID string) ([][]int, error) {
 	var data struct {
 		OAPIResponse
 		Department [][]int `json:"department"`
 	}
-	params:=url.Values{}
-	params.Add("userid",userID)
-	err:= c.httpRPC("/department/list_parent_depts",params,nil,&data)
-	if err!=nil{
-		return data.Department,err
+	params := url.Values{}
+	params.Add("userId", userID)
+	err := c.httpRPC("/department/list_parent_depts", params, nil, &data)
+	if err != nil {
+		return data.Department, err
 	}
-	if data.ErrCode!=0 {
-		return nil,err
+	if data.ErrCode != 0 {
+		return nil, err
 	}
-	return data.Department,nil
+	return data.Department, nil
 }
 
 //CreateChat is
